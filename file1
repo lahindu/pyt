@@ -1,0 +1,44 @@
+import xml.etree.ElementTree as ET
+import re
+tree = ET.parse('GITCRM--WorthinessUpgradeEligibiltyAPI_vv1.0.0.xml')
+root = tree.getroot()
+file = open('GITCRM.xml',"w")
+
+#print(root.tag)
+#print(root[1][1].text)
+
+#vertionAray = root.attrib
+#print(vertionAray["version"])
+
+#for child in root:
+#    print(child.tag)
+print(root[0][0][3][0][0][0][0].attrib)
+print(root[0][0][3][1][0][0][0].attrib)
+
+prodDic = root[0][0][3][0][0][0].attrib
+prodURL = root[0][0][3][0][0][0][0].attrib
+
+stageDic = root[0][0][3][1][0][0].attrib
+stageURL = root[0][0][3][1][0][0][0].attrib
+
+if re.search(r'productionEndpoint',prodDic["name"]):
+    prodURL["uri-template"]="http://localhost/prod"
+    #print("matched")
+
+if re.search(r'sandboxEndpoint',stageDic["name"]):
+    stageURL["uri-template"]="http://localhost/sand"
+
+#if (prodDic["name"] == "GITCRM--WorthinessUpgradeEligibiltyAPI_APIproductionEndpoint_0"):{
+#    print("matched")
+#}
+#xmlstr = ET.tostring(et, encoding='utf8', method='xml')
+#file.write(tree)
+#print(root[0][0][3][0][0][0].attrib)
+print(root[0][0][3][0][0][0][0])
+print(root[0][0][3][1][0][0][0].attrib)
+
+file.close()
+
+
+
+

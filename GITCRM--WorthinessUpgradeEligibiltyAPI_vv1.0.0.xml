@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api xmlns="http://ws.apache.org/ns/synapse"
+     context="/crm/pico/up/cw/v1.0.0"
+     name="GITCRM--WorthinessUpgradeEligibiltyAPI"
+     version="v1.0.1"
+     version-type="context">
+    <resource faultSequence="none"
+             methods="OPTIONS GET"
+             uri-template="/upgradeEligibility/{idType}/{idno}">
+        <inSequence>
+            <class name="org.wso2.carbon.apimgt.gateway.mediators.TokenPasser"/>
+            <property name="POST_TO_URI" scope="axis2" value="false"/>
+            <property expression="get-property('SYSTEM_TIME')"
+                      name="api.ut.backendRequestTime"/>
+         		<filter regex="PRODUCTION" source="$ctx:AM_KEY_TYPE">
+            	<then>
+               		<send>
+                        <endpoint name="GITCRM--WorthinessUpgradeEligibiltyAPI_APIproductionEndpoint_0">
+                            <http uri-template="http://localhost/prod">
+                                <timeout>
+                                    <duration>15000</duration>
+                                    <responseAction>fault</responseAction>
+                                </timeout>
+                                <suspendOnFailure>
+                                    <errorCodes>-1</errorCodes>
+                                    <initialDuration>0</initialDuration>
+                                    <progressionFactor>1.0</progressionFactor>
+                                    <maximumDuration>0</maximumDuration>
+                                </suspendOnFailure>
+                                <markForSuspension>
+                                    <errorCodes>-1</errorCodes>
+                                </markForSuspension>
+                            </http>
+                        	<property name="ENDPOINT_ADDRESS" value="http://localhost/prod"/>
+                  		</endpoint>
+                    </send>
+                </then>
+                <else>
+                    <send>
+                        <endpoint name="GITCRM--WorthinessUpgradeEligibiltyAPI_APIsandboxEndpoint_0">
+                            <http uri-template="http://localhost/sand">
+                                <timeout>
+                                    <duration>15000</duration>
+                                    <responseAction>fault</responseAction>
+                                </timeout>
+                                <suspendOnFailure>
+                                    <errorCodes>-1</errorCodes>
+                                    <initialDuration>0</initialDuration>
+                                    <progressionFactor>1.0</progressionFactor>
+                                    <maximumDuration>0</maximumDuration>
+                                </suspendOnFailure>
+                                <markForSuspension>
+                                   	<errorCodes>-1</errorCodes>
+                                </markForSuspension>
+                            </http>
+                        </endpoint>
+                    </send>
+                </else>
+            </filter>
+        </inSequence>
+        <outSequence>
+            <class name="org.wso2.carbon.apimgt.usage.publisher.APIMgtResponseHandler"/>
+         	<send/>
+        </outSequence>
+    </resource>
+    <handlers>
+      	<handler class="org.wso2.carbon.apimgt.gateway.handlers.common.APIMgtLatencyStatsHandler"/>
+      	<handler class="org.wso2.carbon.apimgt.gateway.handlers.security.CORSRequestHandler">
+         	<property name="apiImplementationType" value="ENDPOINT"/>
+      	</handler>
+        <handler class="org.wso2.carbon.apimgt.gateway.handlers.security.APIAuthenticationHandler"/>
+
+        <handler class="org.wso2.carbon.apimgt.gateway.handlers.throttling.APIThrottleHandler">
+         	<property name="id" value="A"/>
+         	<property name="policyKeyResource"
+                      value="gov:/apimgt/applicationdata/res-tiers.xml"/>
+         	<property name="policyKey" value="gov:/apimgt/applicationdata/tiers.xml"/>
+         	<property name="policyKeyApplication"
+                      value="gov:/apimgt/applicationdata/app-tiers.xml"/>
+      	</handler>
+      	<handler class="org.wso2.carbon.apimgt.usage.publisher.APIMgtUsageHandler"/>
+        <handler class="org.wso2.carbon.apimgt.usage.publisher.APIMgtGoogleAnalyticsTrackingHandler">
+            <property name="configKey" value="gov:/apimgt/statistics/ga-config.xml"/>
+        </handler>
+        <handler class="org.wso2.carbon.apimgt.gateway.handlers.ext.APIManagerExtensionHandler"/>
+    </handlers>
+</api>
