@@ -15,6 +15,9 @@ In this prometheus monitoring set up contains following commonents,
 5. grafana
 6. process counter exporter
 
+## Architecture overview
+
+![](https://monitoringdiagrams.s3.ap-southeast-1.amazonaws.com/PrometheusSetup.png)
 
 ## Install
 
