@@ -22,28 +22,34 @@ Create Custom process counter exporter docker image
 
 goto CustomProcessCounterExporter folder
 
-  $ docker build . -t <docker-repo-url>/process_counter_exporter:v1
-  $ docker push <docker-repo-url>/process_counter_exporter:v1
+You can launch a Prometheus container for trying it out with
+
+    $ docker run --name prometheus -d -p 127.0.0.1:9090:9090 prom/prometheus
+
+Prometheus will now be reachable at http://localhost:9090/.
+
+    $ docker build . -t <docker-repo-url>/process_counter_exporter:v1
+    $ docker push <docker-repo-url>/process_counter_exporter:v1
 
 
 Setup monitoring 
 
 1. update process_counter_exporter docker image
 
-  $ vi HelmCharts/process_counter_exporter/values.yaml
+    $ vi HelmCharts/process_counter_exporter/values.yaml
 
 change image.repository value
 
 2. update alertmanager email and slack config
 
-  $ vi HelmCharts/alertmanager/alertmanager.yaml
+    $ vi HelmCharts/alertmanager/alertmanager.yaml
 
 
 3. setup monitoring
 
 deploy kube-state-metrics 
-  $ helm template kube-state-metrics HelmCharts/kube-state-metrics/
-  $ helm install kube-state-metrics HelmCharts/kube-state-metrics/
+    $ helm template kube-state-metrics HelmCharts/kube-state-metrics/
+    $ helm install kube-state-metrics HelmCharts/kube-state-metrics/
 
 deploy node-exporter 
   $ helm template node-exporter HelmCharts/node-exporter/
