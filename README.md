@@ -25,7 +25,7 @@ In this prometheus monitoring set up contains following commonents
 
 **<GIT_HOME>** will refer to git clone directory
 
-Navigate to <GIT_HOME>/CustomProcessCounterExporter folder
+Navigate to <GIT_HOME>/CustomProcessCounterExporter directory
 
     $ docker build . -t <docker-repo-url>/process_counter_exporter:v1
     $ docker push <docker-repo-url>/process_counter_exporter:v1
